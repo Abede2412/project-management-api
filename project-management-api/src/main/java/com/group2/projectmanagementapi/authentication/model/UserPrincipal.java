@@ -16,7 +16,6 @@ public class UserPrincipal implements UserDetails {
     @Getter
     private UUID id;
 
-
     @Getter
     private String name;
 

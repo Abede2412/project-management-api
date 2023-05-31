@@ -18,5 +18,4 @@ public class AppUserResponse {
     private String email;
     private String username;
     private String imageUrl;
-
 }

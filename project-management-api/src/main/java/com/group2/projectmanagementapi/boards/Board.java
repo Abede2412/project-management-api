@@ -1,11 +1,14 @@
 package com.group2.projectmanagementapi.boards;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.group2.projectmanagementapi.appusers.AppUser;
 import com.group2.projectmanagementapi.tasks.Task;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,7 +38,18 @@ public class Board {
     @OneToMany(mappedBy = "board")
     private List<Task> tasks;
 
-    @ManyToMany(mappedBy = "takenBoards")
-    private List<AppUser> takes;
+    @ManyToMany(mappedBy = "boards",
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        })
+    @JsonIgnore
+    @Builder.Default
+    private Set<AppUser> appUsers = new HashSet<>();
+
+    public void addAppUser(AppUser appUser){
+        this.appUsers.add(appUser);
+        appUser.getBoards().add(this);
+    }
     
 }

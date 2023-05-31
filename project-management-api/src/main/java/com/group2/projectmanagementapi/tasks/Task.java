@@ -1,5 +1,6 @@
 package com.group2.projectmanagementapi.tasks;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.group2.projectmanagementapi.boards.Board;
 
 import jakarta.persistence.Entity;
@@ -26,7 +27,9 @@ public class Task {
     private String title;
     private String description;
     private String status;
+
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
     

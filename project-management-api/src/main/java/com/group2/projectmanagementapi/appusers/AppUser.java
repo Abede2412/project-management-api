@@ -1,13 +1,13 @@
 package com.group2.projectmanagementapi.appusers;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.group2.projectmanagementapi.applicationuser.ApplicationUser;
 import com.group2.projectmanagementapi.boards.Board;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,16 +40,17 @@ public class AppUser {
     @Builder.Default
     private String imageUrl = "default";
 
-    @OneToOne
-    @Cascade(CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "application_user_id")
+    @JsonIgnore
     private ApplicationUser applicationUser;
  
-    @ManyToMany
-    @JoinTable(name = "board_take",
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "app_user_boards",
         joinColumns = @JoinColumn(name = "app_user_id"),
         inverseJoinColumns = @JoinColumn(name = "board_id"))
-    private List<Board> takenBoards;
+    @Builder.Default
+    private Set<Board> boards = new HashSet<>();
 
     public AppUserResponse convertToResponse() {
         return AppUserResponse.builder()
@@ -59,6 +60,11 @@ public class AppUser {
             .username(username)
             .imageUrl(imageUrl)
             .build();
+    }
+
+    public void addBoard(Board board){
+        this.boards.add(board);
+        board.getAppUsers().add(this);
     }
  
 }

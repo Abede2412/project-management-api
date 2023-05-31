@@ -1,7 +1,6 @@
 package com.group2.projectmanagementapi.boards;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +14,9 @@ public class BoardRequest {
     private String title;
 
     public Board convertToEntity() {
-        return null;
+        return Board.builder()
+            .title(title)
+            .build();
     }
 
 }

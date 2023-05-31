@@ -21,4 +21,8 @@ public class AppUserService {
         return appUserRepository.save(appUser);
     }
 
+    public AppUser findById(Long id) {
+        return appUserRepository.getReferenceById(id);
+    }
+
 }
