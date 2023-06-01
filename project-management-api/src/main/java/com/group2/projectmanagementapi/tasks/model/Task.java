@@ -1,4 +1,4 @@
-package com.group2.projectmanagementapi.tasks;
+package com.group2.projectmanagementapi.tasks.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.group2.projectmanagementapi.boards.Board;
@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,10 +18,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,5 +33,5 @@ public class Task {
     @JsonIgnore
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
-    
+
 }

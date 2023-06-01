@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.group2.projectmanagementapi.appusers.AppUser;
-import com.group2.projectmanagementapi.tasks.Task;
+import com.group2.projectmanagementapi.tasks.model.Task;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
