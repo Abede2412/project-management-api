@@ -14,7 +14,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public Board createOne(Board board){
+    public Board createOne(Board board) {
         return boardRepository.save(board);
     }
 
@@ -22,8 +22,12 @@ public class BoardService {
         return boardRepository.findBoardsByAppUsersId(id, pageable);
     }
 
+    public Optional<Board> findBoardsByAppUserId(Long id) {
+        return boardRepository.findBoardsByAppUsersId(id);
+    }
+
     public Optional<Board> findById(Long id) {
         return boardRepository.findById(id);
     }
-    
+
 }
