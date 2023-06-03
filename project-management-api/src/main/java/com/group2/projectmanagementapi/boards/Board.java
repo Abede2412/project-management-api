@@ -38,18 +38,22 @@ public class Board {
     @OneToMany(mappedBy = "board")
     private List<Task> tasks;
 
-    @ManyToMany(mappedBy = "boards",
-        cascade = {
+    @ManyToMany(mappedBy = "boards", cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
-        })
+    })
     @JsonIgnore
     @Builder.Default
     private Set<AppUser> appUsers = new HashSet<>();
 
-    public void addAppUser(AppUser appUser){
+    public void addAppUser(AppUser appUser) {
         this.appUsers.add(appUser);
         appUser.getBoards().add(this);
     }
-    
+
+    public void addTask(Task task) {
+        this.tasks.add(task);
+        task.getBoard().addTask(task);
+    }
+
 }

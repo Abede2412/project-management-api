@@ -1,6 +1,6 @@
 package com.group2.projectmanagementapi.appusers;
+
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -40,31 +40,29 @@ public class AppUser {
     @Builder.Default
     private String imageUrl = "default";
 
-    @OneToOne(cascade = {CascadeType.ALL})
+    @OneToOne(cascade = { CascadeType.ALL })
     @JoinColumn(name = "application_user_id")
     @JsonIgnore
     private ApplicationUser applicationUser;
- 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "app_user_boards",
-        joinColumns = @JoinColumn(name = "app_user_id"),
-        inverseJoinColumns = @JoinColumn(name = "board_id"))
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "app_user_boards", joinColumns = @JoinColumn(name = "app_user_id"), inverseJoinColumns = @JoinColumn(name = "board_id"))
     @Builder.Default
     private Set<Board> boards = new HashSet<>();
 
     public AppUserResponse convertToResponse() {
         return AppUserResponse.builder()
-            .id(id)
-            .name(name)
-            .email(email)
-            .username(username)
-            .imageUrl(imageUrl)
-            .build();
+                .id(id)
+                .name(name)
+                .email(email)
+                .username(username)
+                .imageUrl(imageUrl)
+                .build();
     }
 
-    public void addBoard(Board board){
+    public void addBoard(Board board) {
         this.boards.add(board);
         board.getAppUsers().add(this);
     }
- 
+
 }

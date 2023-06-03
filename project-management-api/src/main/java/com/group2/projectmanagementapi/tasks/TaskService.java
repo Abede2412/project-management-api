@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.group2.projectmanagementapi.boards.BoardService;
+import com.group2.projectmanagementapi.boards.Board;
 import com.group2.projectmanagementapi.tasks.exception.TaskNotFoundException;
 import com.group2.projectmanagementapi.tasks.model.Task;
 
@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TaskService {
     private final TaskRepository taskRepository;
-    private final BoardService boardService;
 
     public Task save(Task task) {
         Task savedTask = this.taskRepository.save(task);
@@ -35,8 +34,9 @@ public class TaskService {
 
     public Task updateOne(Task task) {
         Task existingTask = this.findById(task.getId());
-
+        Board existingBoard = existingTask.getBoard();
         task.setId(existingTask.getId());
+        task.setBoard(existingBoard);
         Task updatedTask = this.taskRepository.save(task);
         return updatedTask;
     }

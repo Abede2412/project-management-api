@@ -1,5 +1,8 @@
 package com.group2.projectmanagementapi.tasks.model;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.group2.projectmanagementapi.boards.Board;
 
@@ -32,6 +35,7 @@ public class Task {
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "board_id", nullable = false)
+    @Cascade(CascadeType.PERSIST)
     private Board board;
 
 }

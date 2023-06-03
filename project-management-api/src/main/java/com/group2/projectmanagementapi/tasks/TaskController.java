@@ -2,46 +2,42 @@ package com.group2.projectmanagementapi.tasks;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group2.projectmanagementapi.applicationuser.ApplicationUserService;
-import com.group2.projectmanagementapi.appusers.AppUser;
-import com.group2.projectmanagementapi.authentication.model.UserPrincipal;
 import com.group2.projectmanagementapi.boards.Board;
 import com.group2.projectmanagementapi.boards.BoardService;
 import com.group2.projectmanagementapi.tasks.model.Task;
 import com.group2.projectmanagementapi.tasks.model.dto.TaskRequest;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class TaskController {
     private final TaskService taskService;
-    private final ApplicationUserService applicationUserService;
     private final BoardService boardService;
 
-    @PostMapping("/tasks")
-    public ResponseEntity<Task> createOne(@RequestBody TaskRequest taskRequest) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        AppUser appUser = applicationUserService.findById(userPrincipal.getId()).getAppUser();
-        Optional<Board> board = boardService.findBoardsByAppUserId(appUser.getId());
-
+    @PostMapping("/board/{id}/tasks")
+    public ResponseEntity<Task> createOne(@PathVariable("id") Long id, @RequestBody TaskRequest taskRequest) {
+        Optional<Board> optionalBoard = this.boardService.findById(id);
+        Board board = optionalBoard.get();
         Task newTask = taskRequest.convertToEntity();
-        List<Task> tasks = board.get().getTasks();
-        tasks.add(newTask);
-        board.get().setTasks(tasks);
+        System.out.println(newTask);
+        newTask.setBoard(board);
         Task savedTask = this.taskService.save(newTask);
+
         return ResponseEntity.ok().body(savedTask);
     }
 
@@ -57,6 +53,18 @@ public class TaskController {
         task.setId(id);
         Task updatedTask = this.taskService.updateOne(task);
         return ResponseEntity.ok().body(updatedTask);
+    }
+
+    @GetMapping("/boards/{id}/tasks")
+    public ResponseEntity<List<Task>> getByStatus(@PathVariable("id") Long id,
+            @RequestParam String status) {
+
+        Optional<Board> board = boardService.findById(id);
+        List<Task> tasks = board.get().getTasks();
+        List<Task> filteredTask = tasks.stream().filter(task -> task.getStatus() == status)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(filteredTask);
     }
 
 }
