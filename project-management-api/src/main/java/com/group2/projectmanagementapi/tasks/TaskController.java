@@ -1,8 +1,8 @@
 package com.group2.projectmanagementapi.tasks;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 public class TaskController {
     private final TaskService taskService;
     private final BoardService boardService;
-    private final TaskRepository taskRepository;
 
     @PostMapping("/board/{id}/tasks")
     public ResponseEntity<Task> createOne(@PathVariable("id") Long id, @RequestBody TaskRequest taskRequest) {
@@ -63,11 +62,19 @@ public class TaskController {
 
         Optional<Board> board = boardService.findById(id);
         List<Task> tasks = board.get().getTasks();
-        System.out.println(tasks);
-        List<Task> filteredTask = tasks.stream().filter(task -> task.getStatus() == status)
-                .collect(Collectors.toList());
+
+        List<Task> filteredTask = tasks.stream().filter(task -> status.equals(task.getStatus()))
+                .toList();
+
         System.out.println(filteredTask);
         return ResponseEntity.ok().body(filteredTask);
+    }
+
+    @GetMapping("/boards/{id}/tasksb")
+    public ResponseEntity<List<Task>> getTaskByBoard(@PathVariable("id") Long id) {
+        Optional<Board> board = boardService.findById(id);
+        List<Task> tasks = board.get().getTasks();
+        return ResponseEntity.ok().body(tasks);
     }
 
 }

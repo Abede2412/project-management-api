@@ -38,10 +38,4 @@ public class Task {
     @Cascade(CascadeType.ALL)
     private Board board;
 
-    @Override
-    public String toString() {
-        return "Task [id=" + id + ", title=" + title + ", description=" + description + ", status=" + status
-                + ", board=" + board + "]";
-    }
-
 }

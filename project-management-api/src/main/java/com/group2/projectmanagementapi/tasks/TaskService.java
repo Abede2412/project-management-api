@@ -40,5 +40,4 @@ public class TaskService {
         Task updatedTask = this.taskRepository.save(task);
         return updatedTask;
     }
-
 }
