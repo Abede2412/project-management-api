@@ -1,6 +1,5 @@
 package com.group2.projectmanagementapi.tasks;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
