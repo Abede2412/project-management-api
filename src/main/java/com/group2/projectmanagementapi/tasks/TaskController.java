@@ -74,8 +74,9 @@ public class TaskController {
 
         Optional<Board> board = boardService.findById(id);
         List<Task> tasks = board.get().getTasks();
-        List<Task> filteredTask = tasks.stream().filter(task -> task.getStatus() == status)
-                .collect(Collectors.toList());
+
+        List<Task> filteredTask = tasks.stream().filter(task -> status.equals(task.getStatus()))
+                .toList();
 
         return ResponseEntity.ok().body(filteredTask);
     }
