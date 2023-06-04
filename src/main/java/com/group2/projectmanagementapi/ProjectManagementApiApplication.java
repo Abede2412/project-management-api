@@ -20,7 +20,7 @@ public class ProjectManagementApiApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		imageService.deleteAll();
+		//imageService.deleteAll();
 		imageService.init();
 	}
 
