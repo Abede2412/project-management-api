@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,6 @@ import com.group2.projectmanagementapi.boards.BoardService;
 import com.group2.projectmanagementapi.tasks.model.Task;
 import com.group2.projectmanagementapi.tasks.model.dto.TaskRequest;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
@@ -28,14 +28,16 @@ import lombok.RequiredArgsConstructor;
 public class TaskController {
     private final TaskService taskService;
     private final BoardService boardService;
+    private final TaskRepository taskRepository;
 
     @PostMapping("/board/{id}/tasks")
     public ResponseEntity<Task> createOne(@PathVariable("id") Long id, @RequestBody TaskRequest taskRequest) {
         Optional<Board> optionalBoard = this.boardService.findById(id);
+
         Board board = optionalBoard.get();
         Task newTask = taskRequest.convertToEntity();
-        System.out.println(newTask);
         newTask.setBoard(board);
+
         Task savedTask = this.taskService.save(newTask);
 
         return ResponseEntity.ok().body(savedTask);
@@ -61,9 +63,10 @@ public class TaskController {
 
         Optional<Board> board = boardService.findById(id);
         List<Task> tasks = board.get().getTasks();
+        System.out.println(tasks);
         List<Task> filteredTask = tasks.stream().filter(task -> task.getStatus() == status)
                 .collect(Collectors.toList());
-
+        System.out.println(filteredTask);
         return ResponseEntity.ok().body(filteredTask);
     }
 

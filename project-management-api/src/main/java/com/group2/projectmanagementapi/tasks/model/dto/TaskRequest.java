@@ -20,4 +20,10 @@ public class TaskRequest {
     public Task convertToEntity() {
         return Task.builder().title(this.title).description(this.description).status(this.status).build();
     }
+
+    @Override
+    public String toString() {
+        return "TaskRequest [id=" + id + ", title=" + title + ", description=" + description + ", status=" + status
+                + "]";
+    }
 }

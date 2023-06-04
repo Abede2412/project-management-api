@@ -34,8 +34,14 @@ public class Task {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "board_id", nullable = false)
-    @Cascade(CascadeType.PERSIST)
+    @JoinColumn(name = "board_id")
+    @Cascade(CascadeType.ALL)
     private Board board;
+
+    @Override
+    public String toString() {
+        return "Task [id=" + id + ", title=" + title + ", description=" + description + ", status=" + status
+                + ", board=" + board + "]";
+    }
 
 }

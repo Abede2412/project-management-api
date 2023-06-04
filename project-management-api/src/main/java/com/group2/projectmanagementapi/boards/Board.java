@@ -4,11 +4,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.group2.projectmanagementapi.appusers.AppUser;
 import com.group2.projectmanagementapi.tasks.model.Task;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,12 +38,11 @@ public class Board {
     private String title;
 
     @OneToMany(mappedBy = "board")
+    @Cascade(CascadeType.PERSIST)
     private List<Task> tasks;
 
-    @ManyToMany(mappedBy = "boards", cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
+    @ManyToMany(mappedBy = "boards")
+    @Cascade(CascadeType.ALL)
     @JsonIgnore
     @Builder.Default
     private Set<AppUser> appUsers = new HashSet<>();
