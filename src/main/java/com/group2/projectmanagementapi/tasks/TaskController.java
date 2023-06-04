@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,6 @@ import com.group2.projectmanagementapi.tasks.model.Task;
 import com.group2.projectmanagementapi.tasks.model.dto.TaskRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
@@ -54,6 +54,15 @@ public class TaskController {
     public ResponseEntity<Task> updateOne(@PathVariable("id") Long id, @RequestBody TaskRequest taskRequest) {
         Task task = taskRequest.convertToEntity();
         task.setId(id);
+        Task updatedTask = this.taskService.updateOne(task);
+        return ResponseEntity.ok().body(updatedTask);
+    }
+
+    @PutMapping("/tasks/{id}/update")
+    @Operation(summary = "update status task by id")
+    public ResponseEntity<Task> updateOne(@PathVariable("id") Long id, @RequestParam("status") String status) {
+        Task task = taskService.findById(id);
+        task.setStatus(status);
         Task updatedTask = this.taskService.updateOne(task);
         return ResponseEntity.ok().body(updatedTask);
     }
